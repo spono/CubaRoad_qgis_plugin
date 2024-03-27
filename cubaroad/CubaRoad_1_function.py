@@ -26,10 +26,9 @@ import numpy as np
 import os,math,datetime,shutil
 from osgeo import gdal,ogr,osr
 from scipy import interpolate,spatial
-global fig
 from qgis.core import QgsMessageLog, Qgis
 from qgis.PyQt.QtCore import QCoreApplication
-
+import matplotlib.pyplot as plt
 global fig 
 fig = False
 
