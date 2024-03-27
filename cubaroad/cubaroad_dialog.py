@@ -57,7 +57,7 @@ class cubaroadDialog(QtWidgets.QDialog, FORM_CLASS):
         #|______/   \______/   \______/      |__|     \______/  |__| \__|# 
         ################################################################## 
         
-        for i in range(1, 4):
+        for i in range(1, 5):
             button = getattr(self, f"pushButton_{i}")
             button.clicked.connect(lambda _, num=i: self.open_folder(num))
 
