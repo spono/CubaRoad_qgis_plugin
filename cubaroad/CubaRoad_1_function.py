@@ -29,8 +29,10 @@ from scipy import interpolate,spatial
 from qgis.core import QgsMessageLog, Qgis
 from qgis.PyQt.QtCore import QCoreApplication
 import matplotlib.pyplot as plt
+import matplotlib._color_data as mcd
 global fig 
 fig = False
+
 
 def console_info(mess):
     mess = str(mess)
@@ -40,6 +42,8 @@ def console_info(mess):
 ###############################################################################
 ### Function
 ###############################################################################
+    
+
 def check_field(filename,fieldname):    
     test=0
     source_ds = ogr.Open(filename)
@@ -62,18 +66,20 @@ def check_field(filename,fieldname):
             test=2
     return test
 
+
 def raster_get_info(in_file_name):
     source_ds = gdal.Open(in_file_name)    
     src_proj = osr.SpatialReference(wkt=source_ds.GetProjection())
     src_ncols = source_ds.RasterXSize
     src_nrows = source_ds.RasterYSize
-    xmin,Csize_x,a,ymax,b,Csize_y = source_ds.GetGeoTransform()
+    xmin,Csize_x,_,ymax,_,Csize_y = source_ds.GetGeoTransform()
     ymin = ymax+src_nrows*Csize_y
     nodata = source_ds.GetRasterBand(1).GetNoDataValue()
     names = ['ncols', 'nrows', 'xllcorner', 'yllcorner', 'cellsize','NODATA_value']
     values = [src_ncols,src_nrows,xmin,ymin,Csize_x,nodata]
     Extent = [xmin,xmin+src_ncols*Csize_x,ymin,ymax]
     return names,values,src_proj,Extent
+
 
 #Chech all spatial entries before processing
 def check_files(Dtm_file,Road_file,from_Sylvaroad):
@@ -82,7 +88,7 @@ def check_files(Dtm_file,Road_file,from_Sylvaroad):
     mess="\nLES PROBLEMES SUIVANTS ONT ETE IDENTIFIES CONCERNANT LES ENTREES SPATIALES: \n"
     #Check DTM    
     try:
-        names,values,proj,Extent = raster_get_info(Dtm_file) 
+        _,values,_,_ = raster_get_info(Dtm_file) 
         Csize = values[4]
         if values[5]==None:
             test=0
@@ -129,6 +135,7 @@ def check_files(Dtm_file,Road_file,from_Sylvaroad):
         
     return test,mess,Csize
 
+
 def build_xyz_tab(dtm,values):
     nrows,ncols = dtm.shape
     Csize = values[4]
@@ -144,6 +151,7 @@ def build_xyz_tab(dtm,values):
     dtmtree = spatial.cKDTree(Tab_xyz[:,:2])
     return Tab_xyz,dtmtree
 
+
 def get_z(coords,dtmtree,Tab_xyz):
     Dists,Inds = dtmtree.query(coords, k=4)
     if Dists[0]==0:
@@ -151,6 +159,7 @@ def get_z(coords,dtmtree,Tab_xyz):
     else:
         w = 1/Dists
         return np.sum(Tab_xyz[Inds,2]*w)/np.sum(w)
+
 
 def calculate_azimut(x1,y1,x2,y2):
     """
@@ -164,6 +173,7 @@ def calculate_azimut(x1,y1,x2,y2):
     Angle = math.degrees(math.acos(DY/Deuc))
     Angle *=Fact
     return Angle%360
+
 
 def linestring_to_seg(Road_file,Tab_xyz,dtmtree):    
     """
@@ -270,11 +280,13 @@ def linestring_to_seg(Road_file,Tab_xyz,dtmtree):
     
     return geo,source_srs
 
+
 def diff_az(az_to,az_from):   
     if az_to>az_from:
         return min((360-(az_to-az_from),(az_to-az_from)))
     else:
         return min((360-(az_from-az_to),(az_from-az_to)))
+
 
 def mean_az(az_from,az_to):
     diff = diff_az(az_to,az_from)   
@@ -290,6 +302,7 @@ def mean_az(az_from,az_to):
     if diff_az(az_to,az) > 110:
         az-=180
     return  az%360
+
 
 def cut_seg_at_step_h(seg_list,step):
     nbseg = seg_list.shape[0]
@@ -415,6 +428,7 @@ def cut_seg_at_step_h(seg_list,step):
     
     return new_seg
 
+
 def get_hairpin(seg_list):
     nblac = int(np.max(seg_list[:,17]))
     nbpt = np.sum(seg_list[:,17]>0)
@@ -453,6 +467,7 @@ def get_hairpin(seg_list):
         pts[idline-1,8] += 0.5*Lseg
     pts = pts[pts[:,4]>0]                     
     return pts,centers
+
 
 def get_pt_analyse(seg_list,step):
     pt_straight_line = cut_seg_at_step_h(seg_list,step)
@@ -494,6 +509,7 @@ def get_pt_analyse(seg_list,step):
                   
     return pt_analyse,centers_lac
     
+
 def get_origin(seg_list,inds):
     i = inds[2][0]
     j = inds[-2][0]
@@ -505,6 +521,7 @@ def get_origin(seg_list,inds):
     uy = ((ax * ax + ay * ay) * (cx - bx) + (bx * bx + by * by) * (ax - cx) + (cx * cx + cy * cy) * (bx - ax)) / d
     uz = np.mean(seg_list[i:j,3])
     return (ux,uy,uz)
+
 
 def save_pt_analyse(pt_analyse,centers_lac,Res_dir,source_srs):
     ###############################################
@@ -613,6 +630,7 @@ def save_pt_analyse(pt_analyse,centers_lac,Res_dir,source_srs):
         feature.Destroy()
     # Cleanup
     target_ds.Destroy()
+
 
 def build_trans(pt_analyse,centers_lac,Csize,Res_dir,save_shp,source_srs): 
     s_radius = max(15,3*Csize)
@@ -783,8 +801,10 @@ def build_trans(pt_analyse,centers_lac,Csize,Res_dir,save_shp,source_srs):
     
     return Tab
 
+
 def conv_az_to_polar(az):
     return (360-(az-90))%360
+
 
 def load_float_raster(raster_file):
     dataset = gdal.Open(raster_file,gdal.GA_ReadOnly)
@@ -808,9 +828,6 @@ def load_float_raster(raster_file):
     dataset.FlushCache()
     return np.float_(Array),Extent,Csize,proj,names,values,gt
 
-def get_profile_intersection(fz,alt):
-    diff = np.abs(fz-alt)
-    return np.argmin(diff),np.min(diff)
 
 def get_profile_intersection2(fz,alt,idC,step2,step3,z_tolerance):
     diffz = fz[idC-step3:idC+step3+1]-alt
@@ -822,6 +839,7 @@ def get_profile_intersection2(fz,alt,idC,step2,step3,z_tolerance):
     else:
         return np.argmin(diff)+idC-step3,True
     
+
 def get_profile_intersection2bis(fz2,alt,idC,step2,z_tolerance):
     diffz = fz2-alt
     diffs = step2*(np.arange(0,fz2.shape[0])-idC)
@@ -832,9 +850,11 @@ def get_profile_intersection2bis(fz2,alt,idC,step2,z_tolerance):
     else:
         return np.argmin(diff),True
     
+
 def get_profile_intersection3(fz,alt,idC,step3):
     diffz = np.abs(fz[idC-step3:idC+step3+1]-alt)   
     return np.argmin(diffz)+idC-step3
+
 
 def get_upper_cross_slope(slope_left,slope_right, min_exca_slope = 0.25, max_exca_slope = 0.60):
     if max(slope_left,slope_right)<0:
@@ -864,6 +884,7 @@ def get_upper_cross_slope(slope_left,slope_right, min_exca_slope = 0.25, max_exc
             ripage = (cross_slope_upper - min_exca_slope) / (max_exca_slope - min_exca_slope)      
     return way,ripage
 
+
 def get_slope_id(s_up):
     #slope of uphill bank
     sl_list=np.array([0.67,1.0,1.5,4.0])
@@ -874,6 +895,7 @@ def get_slope_id(s_up):
             break
     return sid
 
+
 def get_coord_pt_niv(tr,Dnivel):
     x1,y1 = tr[3],tr[4]   
     x2,y2 = tr[6],tr[7]
@@ -883,6 +905,7 @@ def get_coord_pt_niv(tr,Dnivel):
     y = ycp/R*Dnivel+y2    
     return  x,y    
 
+
 def get_coord_pt_niv2(tr,Dnivel):
     x1,y1 = tr[6],tr[7]   
     x2,y2 = tr[3],tr[4]
@@ -891,6 +914,7 @@ def get_coord_pt_niv2(tr,Dnivel):
     x = xcp/R*Dnivel+x2
     y = ycp/R*Dnivel+y2    
     return  x,y    
+
 
 def build_prof(x1,y1,x2,y2,Tab_xyz,dtmtree):
     z1 = get_z([x1,y1], dtmtree,Tab_xyz)  
@@ -912,7 +936,8 @@ def build_prof(x1,y1,x2,y2,Tab_xyz,dtmtree):
     Elev.append(z1)    
     return  np.array(Dist),np.array(Elev),R
 
-def get_profil(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_exca_slope = 0.60,xy_tolerance=2,z_tolerance=0.05,save_fig=False,Res_dir=None,show_fig=True):
+
+def get_profil(tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_exca_slope = 0.60,xy_tolerance=2,z_tolerance=0.05,save_fig=False,Res_dir=None,show_fig=True):
     sl_list=np.array([0.67,1.0,1.5,4.0])
     #get segment param
     xc,yc,zplat = tr[0],tr[1], tr[2]
@@ -1419,7 +1444,7 @@ def get_profil(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_exca_
     return Res,Pt_list
 
 
-def get_profil_L(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_exca_slope = 0.60,surlargeur=0.5,z_tolerance=0.05,save_fig=False,Res_dir=None,show_fig=True):
+def get_profil_L(tr,i,Pt_list,Tab_xyz,dtmtree,surlargeur=0.5,z_tolerance=0.05,save_fig=False,Res_dir=None,show_fig=True):
     sl_list=np.array([0.67,1.0,1.5,4.0])
     #get segment param
     xpla,ypla,zpla = tr[0],tr[1], tr[2]
@@ -1719,7 +1744,8 @@ def get_profil_L(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_exc
     
     return Res,Pt_list
 
-def get_profil_L2(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_exca_slope = 0.60,surlargeur=0.5,z_tolerance=0.05,save_fig=False,Res_dir=None,show_fig=True):
+
+def get_profil_L2(tr,i,Pt_list,Tab_xyz,dtmtree,surlargeur=0.5,z_tolerance=0.05,save_fig=False,Res_dir=None,show_fig=True):
     sl_list=np.array([0.67,1.0,1.5,4.0])
     #get segment param
     xpla,ypla,zpla = tr[0],tr[1], tr[2]
@@ -2051,12 +2077,15 @@ def get_profil_L2(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_ex
     
     return Res,Pt_list
 
+
 def Distplan(y, x,yE, xE):
     return math.sqrt((y-yE)*(y-yE)+(x-xE)*(x-xE))
+
 
 def Distplan3D(y, x,z,yE, xE,zE):
     Dh = math.sqrt((y-yE)*(y-yE)+(x-xE)*(x-xE))
     return math.sqrt((z-zE)*(z-zE)+Dh**2)
+
 
 def save_Tab_init(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):  
     tp = Tab[:,16]>0
@@ -2228,6 +2257,7 @@ def save_Tab_init(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):
         f.close()
     return ltot,vdeb,vevac,vremb,semp,vroc,Tab2[Tab2[:,17]==10]
 
+
 def save_Tab_Lace(Tab2,Res_dir):  
     colname =  "Lacet;Volume en déblai (m\u00B3);Volume en remblai (m\u00B3);"
     colname += "Emprise en déblai (m\u00B2);Emprise en remblai (m\u00B2);Emprise totale (m\u00B2)\n"
@@ -2258,7 +2288,6 @@ def save_Tab_Lace(Tab2,Res_dir):
         f.write(txt)
         f.close()
     
-  
 
 
 def save_Tab(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):  
@@ -2431,7 +2460,7 @@ def save_Tab(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):
     with open(file_name, "w") as f:        
         f.write(txt)
         f.close()
-    return ltot,vdeb,vevac,vremb,semp,vroc
+
 
 def get_param(Dtm_file ,Road_file,step,max_exca_slope,min_exca_slope,
               xy_tolerance,Csize,save_shp,save_fig,from_Sylvaroad,Radius,angle_hairpin):
@@ -2479,17 +2508,13 @@ def get_param(Dtm_file ,Road_file,step,max_exca_slope,min_exca_slope,
     return txt
 
 
-def repeat_space(max_length,var):
-    lvar = len(var)
-    txt = ""
-    for i in range(20-max_length):
-        txt+=' '
-    for i in range(max_length-lvar):
-        txt+=' '
+def repeat_space(max_length, var):
+    txt = var + ' ' * (max_length - len(var))
     return txt
 
+
 def create_param_file(Rspace,param,str_duree,str_fin,str_debut,
-                      ltot,vdeb,vevac,vremb,semp,vroc,ltot0,vdeb0,vevac0,vremb0,semp0,vroc0):
+                      ltot0,vdeb0,vevac0,vremb0,semp0,vroc0):
     
     max_length = max(len(ltot0),len(vdeb0),len(vevac0),len(vremb0),len(semp0),len(vroc0))
     
@@ -2505,12 +2530,12 @@ def create_param_file(Rspace,param,str_duree,str_fin,str_debut,
     txt += "\n\n"
     txt += "RESULTATS DU CALCUL:\n\n"
     txt += "                                       Sans pas d'analyse     Avec pas d'analyse\n" 
-    txt += "   - Longueur planimétrique du tracé : " + ltot0 + ' m ' + repeat_space(max_length,ltot0)+ ltot + ' m\n'
-    txt += "   - Volume en déblai :                " + vdeb0 + ' m\u00B3'+ repeat_space(max_length,vdeb0)+ vdeb + ' m\u00B3\n'
-    txt += "     * dont volume à évacuer :         " + vevac0 + ' m\u00B3'+ repeat_space(max_length,vevac0)+ vevac + ' m\u00B3\n'
-    txt += "     * dont volume de roche :          " + vroc0 + ' m\u00B3'+ repeat_space(max_length,vroc0)+ vroc+ ' m\u00B3\n'
-    txt += "   - Volume en remblai :               " + vremb0 + ' m\u00B3'+ repeat_space(max_length,vremb0)+ vremb+ ' m\u00B3\n'
-    txt += "   - Surface d'emprise :               " + semp0 + ' m\u00B2'+ repeat_space(max_length,semp0)+ semp + ' m\u00B2\n'
+    txt += "   - Longueur planimétrique du tracé : " + ltot0 + ' m ' + repeat_space(max_length,ltot0)+' m\n'
+    txt += "   - Volume en déblai :                " + vdeb0 + ' m\u00B3'+ repeat_space(max_length,vdeb0)+  ' m\u00B3\n'
+    txt += "     * dont volume à évacuer :         " + vevac0 + ' m\u00B3'+ repeat_space(max_length,vevac0)+ ' m\u00B3\n'
+    txt += "     * dont volume de roche :          " + vroc0 + ' m\u00B3'+ repeat_space(max_length,vroc0)+ ' m\u00B3\n'
+    txt += "   - Volume en remblai :               " + vremb0 + ' m\u00B3'+ repeat_space(max_length,vremb0)+  ' m\u00B3\n'
+    txt += "   - Surface d'emprise :               " + semp0 + ' m\u00B2'+ repeat_space(max_length,semp0)+  ' m\u00B2\n'
     
     
     fichier = open(filename, "w")
@@ -2536,6 +2561,7 @@ def save_param_file(Wspace,Dtm_file,Road_file,Res_dir,step,max_exca_slope,
     param = np.array(param)
     np.save(Rspace+"CubaRoad_param.npy",param)
 
+
 def heures(Hdebut):
     Hfin = datetime.datetime.now()
     duree = Hfin - Hdebut
@@ -2545,7 +2571,6 @@ def heures(Hdebut):
     str_fin = Hfin.strftime('%d/%m/%Y %H:%M:%S')
     
     return str_duree, str_fin, str_debut
-
 
 
 def create_res_dir(Result_Dir,Csize,step):
@@ -2715,52 +2740,7 @@ def build_center_line(Res_dir,source_srs,Pt_list):
             pt_ind+=1 
     target_ds.Destroy()     
             
-    
-    
-def save_pt_analyse2(Pt_list,Res_dir,source_srs):
-    ###############################################
-    ### Save analysis point
-    ###############################################        
-    Point_Shape_Path = Res_dir+"P_emprise.shp"
-    #Get driver
-    driver = ogr.GetDriverByName('ESRI Shapefile')      
-    #Create output point shapefile
-    if os.path.exists(Point_Shape_Path):driver.DeleteDataSource(Point_Shape_Path)
-    target_ds = driver.CreateDataSource(Point_Shape_Path)
-    layerName = os.path.splitext(os.path.split(Point_Shape_Path)[1])[0]
-    layer = target_ds.CreateLayer(layerName, source_srs, ogr.wkbPoint)
-    layerDefinition = layer.GetLayerDefn()
-    new_field = ogr.FieldDefn('ID_PT', ogr.OFTInteger)
-    layer.CreateField(new_field)   
-    new_field = ogr.FieldDefn('POSI', ogr.OFTInteger)
-    layer.CreateField(new_field)   
-    pt_ind=1  
-    for id_pt, seg in enumerate(Pt_list):  
-        posi = 1
-        if seg[15]>0:
-            xlist = [0,2,7,11,13,4]
-        else:
-            xlist = [0,2,7,11,13]
-        for j in xlist:            
-            # Create point
-            geometry = ogr.Geometry(ogr.wkbPoint)
-            geometry.AddPoint(float(seg[j]), float(seg[j+1]))
-            # Create feature
-            feature = ogr.Feature(layerDefinition)
-            feature.SetGeometry(geometry)
-            feature.SetFID(pt_ind)
-            feature.SetField('ID_PT',id_pt+1) 
-            feature.SetField('POSI',posi) 
-            # Save feature
-            layer.CreateFeature(feature)
-            # Cleanup
-            geometry.Destroy()
-            feature.Destroy()
-            pt_ind+=1 
-            posi+=1
-    # Cleanup
-    target_ds.Destroy()
-
+        
 def check_sign(a,b):
     if a*b==0:
         if a<0 or b<0:
@@ -2772,7 +2752,8 @@ def check_sign(a,b):
     else:
         return False
 
-def build_assiette(Pt_list,Tab,Rspace,source_srs,pt_analyse):
+
+def build_assiette(Pt_list,Rspace,source_srs,pt_analyse):
     nbpt = Pt_list.shape[0]
     Pt_list2 = np.copy(Pt_list)
     #sans pt niveau en ligne droite
@@ -3053,6 +3034,7 @@ def get_id_lacets(Path,angle_hairpin):
     ind = np.lexsort([lacets[:,1],lacets[:,0]])
     return lacets[ind]
 
+
 def build_radius(R):
     coords =np.zeros((360,3),dtype=np.float) 
     for pol in range(0,360):
@@ -3141,7 +3123,6 @@ def NewPath_to_lineshape(Path,Line_Shape_Path,projection):
         ind +=1        
 
     target_ds.Destroy()  
-
 
 
 def Modify_Roadfile(Road_file,dtmtree,Tab_xyz,Rspace_shp,Csize,angle_hairpin=110,R=10,coefplat=2):
@@ -3431,7 +3412,7 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
          
         for i,tr in enumerate(Trans_list):
             if tr[16]<2:
-                Tab[i],Pt_list=get_profil(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
+                Tab[i],Pt_list=get_profil(tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
                                           xy_tolerance,z_tolerance,save_fig,Rspace,show_fig)      
                 # try:
                 #     Tab[i],Pt_list=get_profil(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
@@ -3442,14 +3423,14 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
             else:    
                 if tr[16]==2:
                     try:
-                        Tab[i],Pt_list=get_profil_L(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
+                        Tab[i],Pt_list=get_profil_L(tr,i,Pt_list,Tab_xyz,dtmtree,
                                                     0,z_tolerance,save_fig,Rspace,show_fig)           
                     except:
                         console_info("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
                         pass
                 else:
                     try:
-                        Tab[i],Pt_list=get_profil_L2(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
+                        Tab[i],Pt_list=get_profil_L2(tr,i,Pt_list,Tab_xyz,dtmtree,
                                                     0,z_tolerance,save_fig,Rspace,show_fig)           
                     except:
                         console_info("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
@@ -3461,7 +3442,7 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         save_Tab_Lace(Tab2,Rspace)
         
         if step!= None:    
-            ltot,vdeb,vevac,vremb,semp,vroc = save_Tab(Tab,Rspace,Pt_list,pt_analyse,max_exca_slope*100)
+            save_Tab(Tab,Rspace,Pt_list,pt_analyse,max_exca_slope*100)
         
         console_info("    - Sauvergarde des tableaux terminée")     
         
@@ -3473,13 +3454,13 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         Rspace_shp += "Shp_Res/"
         
         build_center_line(Rspace_shp,source_srs,Pt_list)
-        build_assiette(Pt_list,Tab,Rspace_shp,source_srs,pt_analyse)
+        build_assiette(Pt_list,Rspace_shp,source_srs,pt_analyse)
         
         console_info("    - Sauvergarde des couches SIG terminée") 
         
         str_duree,str_fin,str_debut=heures(Hdebut)        
-        create_param_file(Rspace,param,str_duree,str_fin,str_debut,ltot,
-                          vdeb,vevac,vremb,semp,vroc,ltot0,vdeb0,vevac0,vremb0,semp0,vroc0)    
+        create_param_file(Rspace,param,str_duree,str_fin,str_debut,
+                          ltot0,vdeb0,vevac0,vremb0,semp0,vroc0)    
         
         console_info("    - Traitement terminé")
     

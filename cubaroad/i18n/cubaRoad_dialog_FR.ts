@@ -24,7 +24,7 @@
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="122"/>
         <source>buffer around theorical axis of the road</source>
-        <translation>Zone tampon autour de l&apos;axe théorique de la route</translation>
+        <translation>Zone tampon autour de l'axe théorique de la route</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="165"/>
@@ -39,7 +39,7 @@
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="191"/>
         <source>Inferior treshold of cross slope to start skiding the road axis</source>
-        <translation>Seuil inférieur de la pente transversale pour commencer à faire déraper l&apos;axe de la route</translation>
+        <translation>Seuil inférieur de la pente transversale pour commencer à faire déraper l'axe de la route</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="204"/>
