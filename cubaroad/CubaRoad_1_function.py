@@ -27,13 +27,16 @@ import os,math,datetime,shutil
 from osgeo import gdal,ogr,osr
 from scipy import interpolate,spatial
 global fig
-try:
-    import matplotlib.pyplot as plt
-    import matplotlib._color_data as mcd
-    fig=True
-except:
-    fig=False
-    print("\nPackage Matplotlib absent. Impossible de sauvegarder les profils")
+from qgis.core import QgsMessageLog, Qgis
+from qgis.PyQt.QtCore import QCoreApplication
+
+global fig 
+fig = False
+
+def console_info(mess):
+    mess = str(mess)
+    QgsMessageLog.logMessage(mess,'SylvaRoaD',Qgis.Info)
+
 
 ###############################################################################
 ### Function
@@ -2537,26 +2540,13 @@ def save_param_file(Wspace,Dtm_file,Road_file,Res_dir,step,max_exca_slope,
 def heures(Hdebut):
     Hfin = datetime.datetime.now()
     duree = Hfin - Hdebut
-    ts = duree.seconds
-    nb_days = int(ts/3600./24.)
-    ts -= nb_days*3600*24
-    nb_hours = int(ts/3600)
-    ts -= nb_hours*3600
-    nb_minutes = int(ts/60)
-    ts -= nb_minutes*60  
-    if nb_days>0:
-        str_duree = str(nb_days)+'j '+str(nb_hours)+'h '+str(nb_minutes)+'min '+str(ts)+'s'        
-    elif nb_hours >0:
-        str_duree = str(nb_hours)+'h '+str(nb_minutes)+'min '+str(ts)+'s'
-    elif nb_minutes>0:
-        str_duree = str(nb_minutes)+'min '+str(ts)+'s'
-    else:
-        str_duree = str(ts)+'s'        
+    str_duree = str(duree).split('.')[0]
+    str_duree = str_duree.split(':')[0] + 'h ' + str_duree.split(':')[1] + 'm ' + str_duree.split(':')[2] + 's'
+    str_debut = Hdebut.strftime('%d/%m/%Y %H:%M:%S')
+    str_fin = Hfin.strftime('%d/%m/%Y %H:%M:%S')
     
-    str_debut = str(Hdebut.day)+'/'+str(Hdebut.month)+'/'+str(Hdebut.year)+' '+str(Hdebut.hour)+':'+str(Hdebut.minute)+':'+str(Hdebut.second)
-    str_fin = str(Hfin.day)+'/'+str(Hfin.month)+'/'+str(Hfin.year)+' '+str(Hfin.hour)+':'+str(Hfin.minute)+':'+str(Hfin.second)
-    
-    return str_duree,str_fin,str_debut
+    return str_duree, str_fin, str_debut
+
 
 
 def create_res_dir(Result_Dir,Csize,step):
@@ -3360,8 +3350,8 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
                    save_shp,Wspace,from_Sylvaroad,Radius,angle_hairpin):    
     
     Hdebut = datetime.datetime.now()
-    print("\nCubaRoad - v2.2")
-    print("\n    - Vérification des donnees spatiales")    
+    console_info("\nCubaRoad - v2.2")
+    console_info("\n    - Vérification des donnees spatiales")    
     test,mess,Csize=check_files(Dtm_file,Road_file,from_Sylvaroad)
     show_fig=False
     if not fig:
@@ -3378,10 +3368,10 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
                     save_fig,save_shp,Rspace,from_Sylvaroad,Radius,angle_hairpin)
     
     if not test:
-        print(mess)
+        console_info(mess)
         
     else:        
-        print("    - Chargement des donnees")        
+        console_info("    - Chargement des donnees")        
             
         dtm,Extent,Csize,proj,names,values,gt = load_float_raster(Dtm_file)
         Tab_xyz,dtmtree = build_xyz_tab(dtm,values)     
@@ -3419,7 +3409,7 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         nbpt = Trans_list.shape[0]
         
         
-        print("    - Calcul des cubatures")   
+        console_info("    - Calcul des cubatures")   
         
         
         Tab = np.zeros((nbpt,23))
@@ -3448,7 +3438,7 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
                 #     Tab[i],Pt_list=get_profil(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
                 #                                  xy_tolerance,z_tolerance,save_fig,Rspace,show_fig)           
                 # except:
-                #     print("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
+                #     console_info("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
                 #     pass
             else:    
                 if tr[16]==2:
@@ -3456,17 +3446,17 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
                         Tab[i],Pt_list=get_profil_L(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
                                                     0,z_tolerance,save_fig,Rspace,show_fig)           
                     except:
-                        print("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
+                        console_info("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
                         pass
                 else:
                     try:
                         Tab[i],Pt_list=get_profil_L2(dtm,tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope,max_exca_slope,
                                                     0,z_tolerance,save_fig,Rspace,show_fig)           
                     except:
-                        print("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
+                        console_info("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
                         pass
                     
-        print("    - Calcul terminé")      
+        console_info("    - Calcul terminé")      
          
         ltot0,vdeb0,vevac0,vremb0,semp0,vroc0,Tab2 = save_Tab_init(Tab,Rspace,Pt_list,pt_analyse,max_exca_slope*100)
         save_Tab_Lace(Tab2,Rspace)
@@ -3474,7 +3464,7 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         if step!= None:    
             ltot,vdeb,vevac,vremb,semp,vroc = save_Tab(Tab,Rspace,Pt_list,pt_analyse,max_exca_slope*100)
         
-        print("    - Sauvergarde des tableaux terminée")     
+        console_info("    - Sauvergarde des tableaux terminée")     
         
         Rspace_shp = Rspace
         if os.path.exists(Rspace+"Shp_Res"):
@@ -3486,11 +3476,11 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         build_center_line(Rspace_shp,source_srs,Pt_list)
         build_assiette(Pt_list,Tab,Rspace_shp,source_srs,pt_analyse)
         
-        print("    - Sauvergarde des couches SIG terminée") 
+        console_info("    - Sauvergarde des couches SIG terminée") 
         
         str_duree,str_fin,str_debut=heures(Hdebut)        
         create_param_file(Rspace,param,str_duree,str_fin,str_debut,ltot,
                           vdeb,vevac,vremb,semp,vroc,ltot0,vdeb0,vevac0,vremb0,semp0,vroc0)    
         
-        print("    - Traitement terminé")
+        console_info("    - Traitement terminé")
     
