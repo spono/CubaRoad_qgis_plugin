@@ -84,9 +84,9 @@
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>0</x>
        <y>10</y>
-       <width>601</width>
+       <width>643</width>
        <height>571</height>
       </rect>
      </property>
@@ -108,6 +108,9 @@
           <pointsize>9</pointsize>
          </font>
         </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
        </widget>
       </item>
       <item row="9" column="0">
@@ -119,7 +122,7 @@
          </font>
         </property>
         <property name="text">
-         <string>buffer around theorical axis of the road</string>
+         <string>Buffer around theorical axis of the road</string>
         </property>
        </widget>
       </item>
@@ -131,6 +134,12 @@
           <pointsize>9</pointsize>
          </font>
         </property>
+        <property name="minimum">
+         <number>-1</number>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
        </widget>
       </item>
       <item row="7" column="2">
@@ -141,6 +150,9 @@
           <pointsize>9</pointsize>
          </font>
         </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
        </widget>
       </item>
       <item row="8" column="2">
@@ -150,6 +162,9 @@
           <family>Nirmala UI</family>
           <pointsize>9</pointsize>
          </font>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
         </property>
        </widget>
       </item>
@@ -252,6 +267,9 @@
           <pointsize>9</pointsize>
          </font>
         </property>
+        <property name="maximum">
+         <number>99999</number>
+        </property>
        </widget>
       </item>
       <item row="10" column="2">
@@ -300,6 +318,9 @@
           <family>Nirmala UI</family>
           <pointsize>9</pointsize>
          </font>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
         </property>
        </widget>
       </item>
@@ -364,7 +385,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Save the point of analyse an transects ?</string>
+         <string>Save the point of analyse and transects ?</string>
         </property>
        </widget>
       </item>
@@ -377,7 +398,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Cross slope beyonde which % of material is excavated</string>
+         <string>Cross slope beyonde which 100% of material is excavated</string>
         </property>
        </widget>
       </item>
@@ -390,7 +411,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Toleroance to consider an intersection with errain</string>
+         <string>Tolerance to consider an intersection with terrain</string>
         </property>
        </widget>
       </item>
@@ -401,6 +422,9 @@
           <family>Nirmala UI</family>
           <pointsize>9</pointsize>
          </font>
+        </property>
+        <property name="maximum">
+         <number>99999</number>
         </property>
        </widget>
       </item>
@@ -650,7 +674,7 @@
       <rect>
        <x>10</x>
        <y>40</y>
-       <width>594</width>
+       <width>658</width>
        <height>92</height>
       </rect>
      </property>
