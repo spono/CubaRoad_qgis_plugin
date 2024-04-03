@@ -56,7 +56,15 @@ class cubaroadDialog(QtWidgets.QDialog, FORM_CLASS):
         #|  |_)  | |  `--'  | |  `--'  |     |  |    |  `--'  | |  |\   |# 
         #|______/   \______/   \______/      |__|     \______/  |__| \__|# 
         ################################################################## 
-        
+        ##test
+        self.lineEdit_1.setText("C:Users/yoann/Downloads/meisenthal2")
+        self.lineEdit_2.setText("C:/Users/yoann/Downloads/meisenthal2/mnt_rgealti_5m.tif")
+        self.lineEdit_3.setText("C:/Users/yoann/Downloads/meisenthal2/results2/salidas_FRD/frd_S_0.0_12.5_R_8.0_FAC_3.0_1.0_1.0_num_1.shp")
+        self.lineEdit_4.setText("C:/Users/yoann/Downloads/meisenthal2/results3")
+        # Connexion des signaux des boutons OK et Annuler()
+        self.button_box.accepted.connect(self.run)
+        self.button_box.rejected.connect(self.abort)
+
         for i in range(1, 5):
             button = getattr(self, f"pushButton_{i}")
             button.clicked.connect(lambda _, num=i: self.open_folder(num))
@@ -98,10 +106,9 @@ class cubaroadDialog(QtWidgets.QDialog, FORM_CLASS):
         Wspace = self.lineEdit_1.text()
         Wspace += '/'
         Dtm_file = self.lineEdit_2.text()
-        Dtm_file += '/'
         Road_file = self.lineEdit_3.text()
-        Road_file += '/'
         Res_dir = self.lineEdit_4.text()
+        Res_dir += '/'
         from_Sylvaroad = self.checkBox_1.isChecked()    # True if Road_file from SylvaRoad / False if Road_file is not from SylvaRoad
         step = self.spinBox_1.value()                   # [m] Step of analysis
         max_exca_slope = self.spinBox_2.value()         # [%] Cross slope beyond which 100% of material is excavated
@@ -120,6 +127,10 @@ class cubaroadDialog(QtWidgets.QDialog, FORM_CLASS):
     ################################################################################
     ### Script execution
     ################################################################################
+
+    def abort(self):
+        self.close()
+
 
     def run(self):
         Wspace,Dtm_file,Road_file,Res_dir,from_Sylvaroad,step,max_exca_slope,min_exca_slope,z_tolerance,xy_tolerance,save_fig,save_shp,Radius,angle_hairpin =Cubaroad_UI.get_var()

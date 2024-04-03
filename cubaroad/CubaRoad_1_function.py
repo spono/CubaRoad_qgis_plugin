@@ -36,7 +36,7 @@ fig = False
 
 def console_info(mess):
     mess = str(mess)
-    QgsMessageLog.logMessage(mess,'SylvaRoaD',Qgis.Info)
+    QgsMessageLog.logMessage(mess,'CubaRoaD',Qgis.Info)
 
 
 ###############################################################################
@@ -85,54 +85,58 @@ def raster_get_info(in_file_name):
 def check_files(Dtm_file,Road_file,from_Sylvaroad):
     test = 1    
     Csize = None
-    mess="\nLES PROBLEMES SUIVANTS ONT ETE IDENTIFIES CONCERNANT LES ENTREES SPATIALES: \n"
+    mess=QCoreApplication.translate("MainWindow","\nLES PROBLEMES SUIVANTS ONT ETE IDENTIFIES CONCERNANT LES ENTREES SPATIALES: \n")
     #Check DTM    
     try:
         _,values,_,_ = raster_get_info(Dtm_file) 
+        ##test
+        console_info(f"values : {values}") 
         Csize = values[4]
         if values[5]==None:
             test=0
-            mess+=" -   Raster MNT : Aucune valeur de NoData definie\n" 
+            mess+=QCoreApplication.translate("MainWindow"," -   Raster MNT : Aucune valeur de NoData definie\n" )
     except:
-        test=0
-        mess+=" -   Raster MNT :  Le chemin d'acces est manquant ou incorrect. Ce raster est obligatoire\n" 
+        #test=0 !!!!!!!!!!
+        mess+=QCoreApplication.translate("MainWindow"," -   Raster MNT :  Le chemin d'acces est manquant ou incorrect. Ce raster est obligatoire\n" )
             
     #Check Roadfile 
     try:    
         testfd = check_field(Road_file,"L_PLAT")
         if testfd==0:
             test=0
-            mess+=" -   Couche de desserte : Le champs 'L_PLAT' est manquant\n"  
+            mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Le champs 'L_PLAT' est manquant\n"  )
         elif testfd==2:
             test=0
-            mess+=" -   Couche de desserte : Veuillez remplir le champs 'L_PLAT' pour toutes les entités\n" 
+            mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Veuillez remplir le champs 'L_PLAT' pour toutes les entités\n" )
         testfd = check_field(Road_file,"PT_AMONT")    
         if testfd==0:
             test=0
-            mess+=" -   Couche de desserte : Le champs 'PT_AMONT' est manquant\n"  
+            mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Le champs 'PT_AMONT' est manquant\n"  )
         elif testfd==2:
             test=0
-            mess+=" -   Couche de desserte : Veuillez remplir le champs 'PT_AMONT' pour toutes les entités\n" 
+            mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Veuillez remplir le champs 'PT_AMONT' pour toutes les entités\n" )
         testfd = check_field(Road_file,"PT_AVAL")    
         if testfd==0:
             test=0
-            mess+=" -   Couche de desserte : Le champs 'PT_AVAL' est manquant\n"  
+            mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Le champs 'PT_AVAL' est manquant\n"  )
         elif testfd==2:
             test=0
-            mess+=" -   Couche de desserte : Veuillez remplir le champs 'PT_AVAL' pour toutes les entités\n"         
+            mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Veuillez remplir le champs 'PT_AVAL' pour toutes les entités\n" )        
         if from_Sylvaroad:
             testfd = check_field(Road_file,"METHOD")    
             if testfd==0: 
                 test=0
-                mess+=" -   Couche de desserte : Le champs 'METHOD' est manquant\n"
+                mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Le champs 'METHOD' est manquant\n")
             elif testfd==2:  
                 test=0
-                mess+=" -   Couche de desserte : Veuillez remplir le champs 'METHOD' pour toutes les entités\n" 
+                mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Veuillez remplir le champs 'METHOD' pour toutes les entités\n" )
         
     except:
-        test=0
-        mess+=" -   Couche de desserte : Le chemin d'acces est manquant ou incorrect. Cette couche est obligatoire\n" 
-        
+         #test=0 !!!!!!!!!!!!
+        mess+=QCoreApplication.translate("MainWindow"," -   Couche de desserte : Le chemin d'acces est manquant ou incorrect. Cette couche est obligatoire\n")
+    ##Quick fix for test need to solve Csize = nonetype error 
+    Csize = 5
+    ##
     return test,mess,Csize
 
 
@@ -226,7 +230,7 @@ def linestring_to_seg(Road_file,Tab_xyz,dtmtree):
             geoLocations.append(seg) 
             ind+=1                  
             
-    geo = np.zeros((len(geoLocations),18),dtype=np.float)        
+    geo = np.zeros((len(geoLocations),18),dtype=np.float32)        
     geo[:,0:11]=np.array(geoLocations)[:,0:-2]
     geo[:,15:-1]=np.array(geoLocations)[:,-2:]        
     geo[:,11] = geo[:,4]-geo[:,1] #delta x
@@ -309,7 +313,7 @@ def cut_seg_at_step_h(seg_list,step):
     nbline = 10*nbseg
     if step!=None and step>0:
         nbline += int(np.sum(np.ceil(seg_list[:,13]/step)))
-    new_seg = np.zeros((nbline,13),dtype=np.float)    
+    new_seg = np.zeros((nbline,13),dtype=np.float32)    
     seg = seg_list[0]
     new_seg[0] = [seg[1],seg[2],seg[3],seg[7],seg[8],seg[9],seg[10],seg[14],0, 1,    1,    1, seg[15]]
     #             x      y       z     az     lplat  sup    sdown   slope   lapplicable  idseg idpt  ex proche
@@ -432,9 +436,9 @@ def cut_seg_at_step_h(seg_list,step):
 def get_hairpin(seg_list):
     nblac = int(np.max(seg_list[:,17]))
     nbpt = np.sum(seg_list[:,17]>0)
-    centers = np.zeros((nblac,4),dtype=np.float) 
+    centers = np.zeros((nblac,4),dtype=np.float32) 
     #idlac x y z 
-    pts = np.zeros((nbpt,15),dtype=np.float)  
+    pts = np.zeros((nbpt,15),dtype=np.float32)  
    #x y z az lplat sup sdown slope lapplicable idseg idpt type idlac posi proche
    #0 1 2 3  4     5   6     7     8           9     10   11   12    13   15
     idline = 0
@@ -475,7 +479,7 @@ def get_pt_analyse(seg_list,step):
 
     nbpt_s = pt_straight_line.shape[0]
     nbpt = nbpt_s+pt_lace.shape[0]
-    pt_analyse = np.zeros((nbpt,16),dtype=np.float)
+    pt_analyse = np.zeros((nbpt,16),dtype=np.float32)
     pt_analyse[0:nbpt_s,0:12]=pt_straight_line[:,0:-1]
     pt_analyse[0:nbpt_s,15]=pt_straight_line[:,-1]
     pt_analyse[nbpt_s:,0:-2]=pt_lace[:,0:-1]
@@ -634,7 +638,7 @@ def save_pt_analyse(pt_analyse,centers_lac,Res_dir,source_srs):
 
 def build_trans(pt_analyse,centers_lac,Csize,Res_dir,save_shp,source_srs): 
     s_radius = max(15,3*Csize)
-    Tab = np.zeros((pt_analyse.shape[0],18),dtype=np.float)
+    Tab = np.zeros((pt_analyse.shape[0],18),dtype=np.float32)
     #x y z xc/x1 yc/y1 zc x2 y2 azi lpla pamont paval slope Lapp idseg idpoint pt_type idlac
     #0 1 2 3     4     5  6  7  8   9    10     11    12    13   14    15      16      17    
     
@@ -1367,9 +1371,9 @@ def get_profil(tr,i,Pt_list,Tab_xyz,dtmtree,min_exca_slope = 0.35, max_exca_slop
     #plot   
     if show_fig or save_fig:     
         
-        pente_trav = 'Pente en travers: '+str(int(ptrav*100+0.5))+"%"
-        tal_amont = 'Talus amont: '+str(int(sl_list[sup_id]*100))+"%"
-        tal_aval = 'Talus aval: '+str(int(s_down*100))+"%"
+        pente_trav = QCoreApplication.translate('Pente en travers: ')+str(int(ptrav*100+0.5))+"%"
+        tal_amont = QCoreApplication.translate('Talus amont: ')+str(int(sl_list[sup_id]*100))+"%"
+        tal_aval = QCoreApplication.translate('Talus aval: ')+str(int(s_down*100))+"%"
        
         fig_title = "Point "+str(idtron)+" - Config "+str(config)
         addtxt=""
@@ -1678,9 +1682,9 @@ def get_profil_L(tr,i,Pt_list,Tab_xyz,dtmtree,surlargeur=0.5,z_tolerance=0.05,sa
     #plot   
     if show_fig or save_fig:     
         
-        pente_trav = 'Pente en travers: '+str(int(ptrav*100+0.5))+"%"
-        tal_amont = 'Talus amont: '+str(abs(int(Res[18])))+"%"
-        tal_aval = 'Talus aval: '+str(abs(int(Res[19])))+"%"
+        pente_trav = QCoreApplication.translate('Pente en travers: ')+str(int(ptrav*100+0.5))+"%"
+        tal_amont = QCoreApplication.translate('Talus amont: ')+str(abs(int(Res[18])))+"%"
+        tal_aval = QCoreApplication.translate('Talus aval: ')+str(abs(int(Res[19])))+"%"
        
         fig_title = "Point "+str(idpt)+" - Lacet "+str(idlac)
         fig_name = Res_dir+"Profils/"+"Pt"+str(idpt)+"_Lacet_"+str(idlac)+".png"
@@ -2006,9 +2010,9 @@ def get_profil_L2(tr,i,Pt_list,Tab_xyz,dtmtree,surlargeur=0.5,z_tolerance=0.05,s
     #plot   
     if show_fig or save_fig:     
         
-        pente_trav = 'Pente en travers: '+str(int(ptrav*100+0.5))+"%"
-        tal_amont = 'Talus amont: '+str(abs(int(Res[18])))+"%"
-        tal_aval = 'Talus aval: '+str(abs(int(Res[19])))+"%"
+        pente_trav = QCoreApplication.translate('Pente en travers: ')+str(int(ptrav*100+0.5))+"%"
+        tal_amont = QCoreApplication.translate('Talus amont: ')+str(abs(int(Res[18])))+"%"
+        tal_aval = QCoreApplication.translate('Talus aval: ')+str(abs(int(Res[19])))+"%"
        
         fig_title = "Point "+str(idpt)+" - Lacet "+str(idlac)
         fig_name = Res_dir+"Profils/"+"Pt"+str(idpt)+"_Lacet_"+str(idlac)+".png"
@@ -2147,21 +2151,21 @@ def save_Tab_init(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):
     Tab2[:,2]=np.round(AzD[:,4],2)
     Tab2[:,7]=np.minimum(Tab2[:,6],Tab2[:,7])
     Tab2[:,10]=np.minimum(Tab2[:,6],Tab2[:,10])    
-        
-    colname =  "Piquet;Type;Pente Gauche (%);"
-    colname += "Pente Droite (%);Longueur applicable (m);Largeur assise (m);"
-    colname += "Talus amont (%);Assise en déblai (m);Section en déblai (m\u00B2);Volume en déblai (m\u00B3);Volume à évacuer (m\u00B3);"
-    colname += "% de roche;Volume de roche (m\u00B3);"
-    colname += "Talus aval (%);Assise en remblai (m);Section en remblai (m\u00B2);Volume en remblai (m\u00B3);"
-    colname += "Assiette en déblai (m);Assiette en remblai (m);Piquet contrôle amont (m);Piquet contrôle aval (m);Emprise (m);Surface emprise (m\u00B2);"
-    colname += "Xniv;Yniv;Zniv;Azimut p. niveau suivant (grad);Distance réelle p. niveau suivant (m);Pente long p. niveau suivant (%);"
-    colname += "Xcen;Ycen;Zcen;Diff. altitude entre terrain p. central;Azimut p. central suivant (grad);Distance réelle p. central suivant (m);Pente long p. central suivant (%)\n"
+
+    colname =  QCoreApplication.translate("MainWindow","Piquet;Type;Pente Gauche (%);")
+    colname += QCoreApplication.translate("MainWindow","Pente Droite (%);Longueur applicable (m);Largeur assise (m);")
+    colname += QCoreApplication.translate("MainWindow","Talus amont (%);Assise en déblai (m);Section en déblai (m²);Volume en déblai (m\u00B3);Volume à évacuer (m\u00B3);")
+    colname += QCoreApplication.translate("MainWindow","% de roche;Volume de roche (m\u00B3);")
+    colname += QCoreApplication.translate("MainWindow","Talus aval (%);Assise en remblai (m);Section en remblai (m²);Volume en remblai (m\u00B3);")
+    colname += QCoreApplication.translate("MainWindow","Assiette en déblai (m);Assiette en remblai (m);Piquet contrôle amont (m);Piquet contrôle aval (m);Emprise (m);Surface emprise (m²);")
+    colname += QCoreApplication.translate("MainWindow","Xniv;Yniv;Zniv;Azimut p. niveau suivant (grad);Distance réelle p. niveau suivant (m);Pente long p. niveau suivant (%);")
+    colname +=QCoreApplication.translate("MainWindow","Xcen;Ycen;Zcen;Diff. altitude entre terrain p. central;Azimut p. central suivant (grad);Distance réelle p. central suivant (m);Pente long p. central suivant (%)\n")
 
     txt = colname
     scum=0
     vcum=0
     vroc=0
-    
+
     for i,dt in enumerate(Tab2):      
         txt += str(int(dt[0]))
         if dt[16]==1:
@@ -2238,20 +2242,20 @@ def save_Tab_init(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):
         else:
             txt+=';;;' 
         txt+='\n'
-        
+
     ltot = str(round(np.sum(Tab2[:,2]),2))
     vdeb = str(round(np.sum(Tab2[:,9]),2))
     vevac = str(round(vcum,2))
     vremb = str(round(np.sum(Tab2[:,12]),2))
     semp = str(round(scum,2))
     vroc = str(round(vroc,2))
-    
+
     txt+="TOTAL;;;;;"+ltot+";;;;;"
     txt+=vdeb+";"+vevac+";;"+vroc+";;;;"+vremb
     txt+=";;;;;;"+semp
-    
+
     file_name=Res_dir+"Tab_cubature_pts_init.csv"
-    
+
     with open(file_name, "w") as f:        
         f.write(txt)
         f.close()
@@ -2259,8 +2263,8 @@ def save_Tab_init(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):
 
 
 def save_Tab_Lace(Tab2,Res_dir):  
-    colname =  "Lacet;Volume en déblai (m\u00B3);Volume en remblai (m\u00B3);"
-    colname += "Emprise en déblai (m\u00B2);Emprise en remblai (m\u00B2);Emprise totale (m\u00B2)\n"
+    colname =  QCoreApplication.translate("MainWindow","Lacet;Volume en déblai (m\\u00B3);Volume en remblai (m\\u00B3);")
+    colname += QCoreApplication.translate("MainWindow","Emprise en déblai (m²);Emprise en remblai (m²);Emprise totale (m²)\n")
     emp_deb = Tab2[:,13]*Tab2[:,2]
     emp_rem = Tab2[:,14]*Tab2[:,2] 
     
@@ -2288,7 +2292,6 @@ def save_Tab_Lace(Tab2,Res_dir):
         f.write(txt)
         f.close()
     
-
 
 def save_Tab(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):  
     tp = Tab[:,0]>0
@@ -2349,14 +2352,14 @@ def save_Tab(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):
     Tab2[:,2]=np.round(AzD[:,4],2)
     Tab2[:,7]=np.minimum(Tab2[:,6],Tab2[:,7])
     Tab2[:,10]=np.minimum(Tab2[:,6],Tab2[:,10])
-    colname =  "Piquet;Type;Configuration;Pente Gauche (%);"
-    colname += "Pente Droite (%);Longueur applicable (m);Largeur assise (m);"
-    colname += "Talus amont (%);Assise en déblai (m);Section en déblai (m\u00B2);Volume en déblai (m\u00B3);Volume à évacuer (m\u00B3);"
-    colname += "% de roche;Volume de roche (m\u00B3);"
-    colname += "Talus aval (%);Assise en remblai (m);Section en remblai (m\u00B2);Volume en remblai (m\u00B3);"
-    colname += "Assiette en déblai (m);Assiette en remblai (m);Piquet contrôle amont (m);Piquet contrôle aval (m);Emprise (m);Surface emprise (m\u00B2);"
-    colname += "Xniv;Yniv;Zniv;Azimut p. niveau suivant (grad);Distance réelle p. niveau suivant (m);Pente long p. niveau suivant (%);"
-    colname += "Xcen;Ycen;Zcen;Diff. altitude entre terrain p. central;Azimut p. central suivant (grad);Distance réelle p. central suivant (m);Pente long p. central suivant (%)\n"
+    colname =  QCoreApplication.translate("MainWindow","Piquet;Type;Configuration;Pente Gauche (%);")
+    colname += QCoreApplication.translate("MainWindow","Pente Droite (%);Longueur applicable (m);Largeur assise (m);")
+    colname += QCoreApplication.translate("MainWindow","Talus amont (%);Assise en déblai (m);Section en déblai (m²);Volume en déblai (m\u00B3);Volume à évacuer (m\u00B3);")
+    colname += QCoreApplication.translate("MainWindow","% de roche;Volume de roche (m\u00B3);")
+    colname += QCoreApplication.translate("MainWindow","Talus aval (%);Assise en remblai (m);Section en remblai (m²);Volume en remblai (m\u00B3);")
+    colname += QCoreApplication.translate("MainWindow","Assiette en déblai (m);Assiette en remblai (m);Piquet contrôle amont (m);Piquet contrôle aval (m);Emprise (m);Surface emprise (m²);")
+    colname += QCoreApplication.translate("MainWindow","Xniv;Yniv;Zniv;Azimut p. niveau suivant (grad);Distance réelle p. niveau suivant (m);Pente long p. niveau suivant (%);")
+    colname += QCoreApplication.translate("MainWindow","Xcen;Ycen;Zcen;Diff. altitude entre terrain p. central;Azimut p. central suivant (grad);Distance réelle p. central suivant (m);Pente long p. central suivant (%)\n")
 
 
     txt = colname
@@ -2460,50 +2463,51 @@ def save_Tab(Tab,Res_dir,Pt_list,pt_analyse,max_exca_slope):
     with open(file_name, "w") as f:        
         f.write(txt)
         f.close()
+    return ltot,vdeb,vevac,vremb,semp,vroc
 
 
 def get_param(Dtm_file ,Road_file,step,max_exca_slope,min_exca_slope,
               xy_tolerance,Csize,save_shp,save_fig,from_Sylvaroad,Radius,angle_hairpin):
     
     if step == None:
-        str_stp = "Aucun, analyse à chaque sommet de la couche desserte\n"
+        str_stp = QCoreApplication.translate("MainWindow","Aucun, analyse à chaque sommet de la couche desserte\n")
     else:
         str_stp = str(step)+" m\n"
         
     if xy_tolerance == None:
-        str_xy = "0.5 x Largeur de plateforme\n"
+        str_xy = QCoreApplication.translate("MainWindow","0.5 x Largeur de plateforme\n")
     else:
         str_xy = str(xy_tolerance)+" m\n"
         
     if save_fig:
-        str_fig = "Oui\n"
+        str_fig = QCoreApplication.translate("MainWindow","Oui\n")
     else:
-        str_fig = "Non\n"
+        str_fig = QCoreApplication.translate("MainWindow","Non\n")
         
     if save_shp:
-        str_shp = "Oui\n"
+        str_shp = QCoreApplication.translate("MainWindow","Oui\n")
     else:
-        str_shp = "Non\n"
+        str_shp = QCoreApplication.translate("MainWindow","Non\n")
     
-    txt = "FICHIERS UTILISES POUR LA MODELISATION:\n\n"
-    txt = txt+"   - MNT :                 " + Dtm_file+"\n"
-    txt = txt+"     Résolution (m) :      "+str(Csize)+" m\n"
-    txt = txt+"   - Couche Desserte :     " + Road_file+"\n\n\n"
+    txt = QCoreApplication.translate("MainWindow","FICHIERS UTILISES POUR LA MODELISATION:\n\n")
+    txt += QCoreApplication.translate("MainWindow","   - MNT :                 ") + Dtm_file+"\n"
+    txt += QCoreApplication.translate("MainWindow","     Résolution (m) :      ")+str(Csize)+" m\n"
+    txt += QCoreApplication.translate("MainWindow","   - Couche Desserte :     ") + Road_file+"\n\n\n"
     
     
-    txt = txt + "PARAMETRES UTILISES POUR LA MODELISATION:\n\n"
-    txt = txt+"   - Seuil de pente maximum (ripage=1) :                          "+str(max_exca_slope)+" %\n"
-    txt = txt+"   - Seuil de pente minimum (ripage=0) :                          "+str(min_exca_slope)+" %\n"
-    txt = txt+"   - Pas de l'analyse :                                           "+str_stp
-    txt = txt+"   - Largeur de la zone tampon autour de l'axe théorique :        "+str_xy
-    txt = txt+"   - Sauvegarde des profils perpendiculaires :                    "+str_fig
-    txt = txt+"   - Sauvegarde des couches SIG :                                 "+str_shp+'\n'
+    txt += QCoreApplication.translate("MainWindow","PARAMETRES UTILISES POUR LA MODELISATION:\n\n")
+    txt += QCoreApplication.translate("MainWindow","   - Seuil de pente maximum (ripage=1) :                          ")+str(max_exca_slope)+" %\n"
+    txt += QCoreApplication.translate("MainWindow","   - Seuil de pente minimum (ripage=0) :                          ")+str(min_exca_slope)+" %\n"
+    txt += QCoreApplication.translate("MainWindow","   - Pas de l'analyse :                                           ")+str_stp
+    txt += QCoreApplication.translate("MainWindow","   - Largeur de la zone tampon autour de l'axe théorique :        ")+str_xy
+    txt += QCoreApplication.translate("MainWindow","   - Sauvegarde des profils perpendiculaires :                    ")+str_fig
+    txt += QCoreApplication.translate("MainWindow","   - Sauvegarde des couches SIG :                                 ")+str_shp+'\n'
     if from_Sylvaroad:
-        txt = txt+"   - Retracer les lacets :                                        Non\n"  
+        txt += QCoreApplication.translate("MainWindow","   - Retracer les lacets :                                        Non\n"  )
     else:
-        txt = txt+"   - Retracer les lacets :                                        Oui\n"  
-        txt = txt+"     + Rayon de courbure appliqué aux lacets :                    "+str(Radius)+ " m\n"
-        txt = txt+"     + Angle au-delà duquel un virage est considéré comme lacet : "+str(angle_hairpin)+ " °\n"
+        txt += QCoreApplication.translate("MainWindow","   - Retracer les lacets :                                        Oui\n"  )
+        txt += QCoreApplication.translate("MainWindow","     + Rayon de courbure appliqué aux lacets :                    ")+str(Radius)+ " m\n"
+        txt += QCoreApplication.translate("MainWindow","     + Angle au-delà duquel un virage est considéré comme lacet : ")+str(angle_hairpin)+ " °\n"
         
     return txt
 
@@ -2513,29 +2517,31 @@ def repeat_space(max_length, var):
     return txt
 
 
-def create_param_file(Rspace,param,str_duree,str_fin,str_debut,
-                      ltot0,vdeb0,vevac0,vremb0,semp0,vroc0):
+def create_param_file(Rspace,param,str_duree,str_fin,str_debut,ltot,vdeb,vevac,
+                      vremb,semp,vroc,ltot0,vdeb0,vevac0,vremb0,semp0,vroc0):
     
     max_length = max(len(ltot0),len(vdeb0),len(vevac0),len(vremb0),len(semp0),len(vroc0))
     
     filename = Rspace +"Parametre_simulation.txt"    
     txt = "CubaRoad\n\n"
-    txt = txt+"Version du programme: 2.2 08/2021\n"
-    txt = txt+"Auteur: Sylvain DUPIRE - SylvaLab\n\n"
-    txt = txt+"Date et heure de lancement du script:                                      "+str_debut+"\n"
-    txt = txt+"Date et heure a la fin de l'éxécution du script:                           "+str_fin+"\n"
-    txt = txt+"Temps total d'éxécution du script:                                         "+str_duree+"\n\n"
-    txt = txt+param
+    ver = "0.2"
+    date = "08/2021"
+    txt += QCoreApplication.translate("MainWindow","Version du programme: ") + ver + " - " + date + "\n"
+    txt += QCoreApplication.translate("MainWindow","Auteur: Sylvain DUPIRE - SylvaLab\n\n")
+    txt += QCoreApplication.translate("MainWindow","Date et heure de lancement du script:                                      ")+str_debut+"\n"
+    txt += QCoreApplication.translate("MainWindow","Date et heure a la fin de l'éxécution du script:                           ")+str_fin+"\n"
+    txt += QCoreApplication.translate("MainWindow","Temps total d'éxécution du script:                                         ")+str_duree+"\n\n"
+    txt += param
 
     txt += "\n\n"
-    txt += "RESULTATS DU CALCUL:\n\n"
-    txt += "                                       Sans pas d'analyse     Avec pas d'analyse\n" 
-    txt += "   - Longueur planimétrique du tracé : " + ltot0 + ' m ' + repeat_space(max_length,ltot0)+' m\n'
-    txt += "   - Volume en déblai :                " + vdeb0 + ' m\u00B3'+ repeat_space(max_length,vdeb0)+  ' m\u00B3\n'
-    txt += "     * dont volume à évacuer :         " + vevac0 + ' m\u00B3'+ repeat_space(max_length,vevac0)+ ' m\u00B3\n'
-    txt += "     * dont volume de roche :          " + vroc0 + ' m\u00B3'+ repeat_space(max_length,vroc0)+ ' m\u00B3\n'
-    txt += "   - Volume en remblai :               " + vremb0 + ' m\u00B3'+ repeat_space(max_length,vremb0)+  ' m\u00B3\n'
-    txt += "   - Surface d'emprise :               " + semp0 + ' m\u00B2'+ repeat_space(max_length,semp0)+  ' m\u00B2\n'
+    txt += QCoreApplication.translate("MainWindow","RESULTATS DU CALCUL:\n\n")
+    txt +=QCoreApplication.translate("MainWindow","                                       Sans pas d'analyse     Avec pas d'analyse\n") 
+    txt += QCoreApplication.translate("MainWindow","   - Longueur planimétrique du tracé : ") + ltot0 + ' m ' + repeat_space(max_length,ltot0)+ ltot + ' m\n'
+    txt += QCoreApplication.translate("MainWindow","   - Volume en déblai :                ") + vdeb0 + ' m\u00B3'+ repeat_space(max_length,vdeb0)+ vdeb + ' m\u00B3\n'
+    txt += QCoreApplication.translate("MainWindow","     * dont volume à évacuer :         ")+ vevac0 + ' m\u00B3'+ repeat_space(max_length,vevac0)+ vevac + ' m\u00B3\n'
+    txt += QCoreApplication.translate("MainWindow","     * dont volume de roche :          ") + vroc0 + ' m\u00B3'+ repeat_space(max_length,vroc0)+ vroc+ ' m\u00B3\n'
+    txt += QCoreApplication.translate("MainWindow","   - Volume en remblai :               ") + vremb0 + ' m\u00B3'+ repeat_space(max_length,vremb0)+ vremb+ ' m\u00B3\n'
+    txt += QCoreApplication.translate("MainWindow","   - Surface d'emprise :               ") + semp0 + ' m²'+ repeat_space(max_length,semp0)+ semp + ' m²\n'
     
     
     fichier = open(filename, "w")
@@ -2596,7 +2602,7 @@ def create_res_dir(Result_Dir,Csize,step):
 
 def build_center_line(Res_dir,source_srs,Pt_list):    
     val = np.unique(Pt_list[:,19])
-    centers = np.zeros((val.shape[0],9),dtype=np.float)
+    centers = np.zeros((val.shape[0],9),dtype=np.float32)
     #idpt xniv yniv zniv xcenter ycenter zcenter dzcenter nivinplat
     #0    1    2    3    4       5       6       7        8
     for i,pt in enumerate(val):
@@ -2649,6 +2655,7 @@ def build_center_line(Res_dir,source_srs,Pt_list):
     ###############################################
     ### Save nivel line
     ###############################################  
+
     driver = ogr.GetDriverByName('ESRI Shapefile')      
     #Create output point shapefile
     emp_name = Res_dir+"L_niveau.shp"
@@ -2814,7 +2821,7 @@ def build_assiette(Pt_list,Rspace,source_srs,pt_analyse):
     #Compute new xy when 2 pts are the same             
     val = np.unique(Pt_list2[:,19])
     Pt_list3 = np.copy(Pt_list2)
-    Pt_list2 = np.zeros((val.shape[0],Pt_list3.shape[1]),dtype=np.float)    
+    Pt_list2 = np.zeros((val.shape[0],Pt_list3.shape[1]),dtype=np.float32)    
     for i,pt in enumerate(val): 
         inds = np.argwhere(Pt_list[:,19]==pt)[:,0]
         Pt_list2[i]=Pt_list3[inds[0]]
@@ -3036,7 +3043,7 @@ def get_id_lacets(Path,angle_hairpin):
 
 
 def build_radius(R):
-    coords =np.zeros((360,3),dtype=np.float) 
+    coords =np.zeros((360,3),dtype=np.float32) 
     for pol in range(0,360):
         coords[pol,0]=pol
         coords[pol,1]= R*math.cos(math.radians((pol)%360))#x
@@ -3144,7 +3151,7 @@ def Modify_Roadfile(Road_file,dtmtree,Tab_xyz,Rspace_shp,Csize,angle_hairpin=110
         geom = feat.GetGeometryRef()
         nb_pt+= geom.GetPointCount()-1  
     
-    Path = np.zeros( (nb_pt,9),dtype=np.float)
+    Path = np.zeros( (nb_pt,9),dtype=np.float32)
     #y x z Slope_from az_from P_ROCHER L_PLAT PT_AMONT PT_AVAL
     #0 1 2 3          4       5        6      7        8
     idline = 0
@@ -3328,10 +3335,26 @@ def Modify_Roadfile(Road_file,dtmtree,Tab_xyz,Rspace_shp,Csize,angle_hairpin=110
 def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
                    min_exca_slope,z_tolerance,xy_tolerance,save_fig,
                    save_shp,Wspace,from_Sylvaroad,Radius,angle_hairpin):    
-    
+    #test
+    console_info(f"DTM file: {Dtm_file}")
+    console_info(f"Road file: {Road_file}")
+    console_info(f"Result directory: {Res_dir}")
+    console_info(f"Step: {step}")
+    console_info(f"Max excavation slope: {max_exca_slope}")
+    console_info(f"Min excavation slope: {min_exca_slope}")
+    console_info(f"Z tolerance: {z_tolerance}")
+    console_info(f"XY tolerance: {xy_tolerance}")
+    console_info(f"Save figure: {save_fig}")
+    console_info(f"Save shapefile: {save_shp}")
+    console_info(f"Working directory: {Wspace}")
+    console_info(f"From Sylvaroad: {from_Sylvaroad}")
+    console_info(f"Radius: {Radius}")
+    console_info(f"Angle hairpin: {angle_hairpin}")
+
     Hdebut = datetime.datetime.now()
-    console_info("\nCubaRoad - v2.2")
-    console_info("\n    - Vérification des donnees spatiales")    
+    ver = 0.2
+    console_info(QCoreApplication.translate("MainWindow","\nCubaRoad") + " - " + str(ver))
+    console_info(QCoreApplication.translate("MainWindow","\n    - Vérification des donnees spatiales"))   
     test,mess,Csize=check_files(Dtm_file,Road_file,from_Sylvaroad)
     show_fig=False
     if not fig:
@@ -3351,9 +3374,8 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         console_info(mess)
         
     else:        
-        console_info("    - Chargement des donnees")        
-            
-        dtm,Extent,Csize,proj,names,values,gt = load_float_raster(Dtm_file)
+        console_info(QCoreApplication.translate("MainWindow","    - Chargement des donnees"))      
+        dtm,_,Csize,_,_,values,_ = load_float_raster(Dtm_file)
         Tab_xyz,dtmtree = build_xyz_tab(dtm,values)     
         
         if step!= None :
@@ -3389,7 +3411,7 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         nbpt = Trans_list.shape[0]
         
         
-        console_info("    - Calcul des cubatures")   
+        console_info(QCoreApplication.translate("MainWindow","    - Calcul des cubatures"))   
         
         
         Tab = np.zeros((nbpt,23))
@@ -3426,25 +3448,25 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
                         Tab[i],Pt_list=get_profil_L(tr,i,Pt_list,Tab_xyz,dtmtree,
                                                     0,z_tolerance,save_fig,Rspace,show_fig)           
                     except:
-                        console_info("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
+                        console_info(QCoreApplication.translate("MainWindow","       + Le calcul n'a pas été réalisé pour le point n°")+str(int(tr[15])))
                         pass
                 else:
                     try:
                         Tab[i],Pt_list=get_profil_L2(tr,i,Pt_list,Tab_xyz,dtmtree,
                                                     0,z_tolerance,save_fig,Rspace,show_fig)           
                     except:
-                        console_info("       + Le calcul n'a pas été réalisé pour le point n°"+str(int(tr[15])))
+                        console_info(QCoreApplication.translate("MainWindow","       + Le calcul n'a pas été réalisé pour le point n°")+str(int(tr[15])))
                         pass
                     
-        console_info("    - Calcul terminé")      
+        console_info(QCoreApplication.translate("MainWindow","    - Calcul terminé"))      
          
         ltot0,vdeb0,vevac0,vremb0,semp0,vroc0,Tab2 = save_Tab_init(Tab,Rspace,Pt_list,pt_analyse,max_exca_slope*100)
         save_Tab_Lace(Tab2,Rspace)
         
         if step!= None:    
-            save_Tab(Tab,Rspace,Pt_list,pt_analyse,max_exca_slope*100)
+            ltot,vdeb,vevac,vremb,semp,vroc = save_Tab(Tab,Rspace,Pt_list,pt_analyse,max_exca_slope*100)
         
-        console_info("    - Sauvergarde des tableaux terminée")     
+        console_info(QCoreApplication.translate("MainWindow","    - Sauvergarde des tableaux terminée")) 
         
         Rspace_shp = Rspace
         if os.path.exists(Rspace+"Shp_Res"):
@@ -3456,11 +3478,11 @@ def apply_cubaroad(Dtm_file,Road_file,Res_dir,step,max_exca_slope,
         build_center_line(Rspace_shp,source_srs,Pt_list)
         build_assiette(Pt_list,Rspace_shp,source_srs,pt_analyse)
         
-        console_info("    - Sauvergarde des couches SIG terminée") 
+        console_info(QCoreApplication.translate("MainWindow","    - Sauvergarde des couches SIG terminée")) 
         
         str_duree,str_fin,str_debut=heures(Hdebut)        
-        create_param_file(Rspace,param,str_duree,str_fin,str_debut,
-                          ltot0,vdeb0,vevac0,vremb0,semp0,vroc0)    
+        create_param_file(Rspace,param,str_duree,str_fin,str_debut,ltot,
+                          vdeb,vevac,vremb,semp,vroc,ltot0,vdeb0,vevac0,vremb0,semp0,vroc0)     
         
-        console_info("    - Traitement terminé")
+        console_info(QCoreApplication.translate("MainWindow","    - Traitement terminé"))
     

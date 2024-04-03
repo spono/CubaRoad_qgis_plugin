@@ -1,5 +1,6 @@
 # Add your Python source files
 SOURCES += ../cubaroad_dialog.py \
+          ../CubaRoad_1_function.py \
 
 
 # Add your UI file
