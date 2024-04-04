@@ -107,66 +107,70 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
     <message>
         <location filename="../CubaRoad_1_function.py" line="2356"/>
         <source>Pente Droite (%);Longueur applicable (m);Largeur assise (m);</source>
-        <translation type="unfinished"></translation>
+        <translation>Right Slope (%);Applicable Length (m);Bench Width (m);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2357"/>
         <source>Talus amont (%);Assise en déblai (m);Section en déblai (m²);Volume en déblai (mu00B3);Volume à évacuer (mu00B3);</source>
-        <translation type="unfinished"></translation>
+        <translation>Upstream Slope (%);Excavation Bench (m);Excavation Section (m²);Excavation Volume (m³);Volume to be Removed (m³);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2358"/>
         <source>% de roche;Volume de roche (mu00B3);</source>
-        <translation type="unfinished"></translation>
+        <translation>% of Rock;Rock Volume (m³);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2359"/>
         <source>Talus aval (%);Assise en remblai (m);Section en remblai (m²);Volume en remblai (mu00B3);</source>
-        <translation type="unfinished"></translation>
+        <translation>Downstream Slope (%);Embankment Bench (m);Embankment Section (m²);Embankment Volume (m³);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2360"/>
         <source>Assiette en déblai (m);Assiette en remblai (m);Piquet contrôle amont (m);Piquet contrôle aval (m);Emprise (m);Surface emprise (m²);</source>
-        <translation type="unfinished"></translation>
+        <translation>Excavation Base (m);Fill Base (m);Upstream Control Stake (m);Downstream Control Stake (m);Right-of-Way (m);Surface Area (m²);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2361"/>
         <source>Xniv;Yniv;Zniv;Azimut p. niveau suivant (grad);Distance réelle p. niveau suivant (m);Pente long p. niveau suivant (%);</source>
-        <translation type="unfinished"></translation>
+        <translation>X level;Y level;Z level;Azimuth to next level (degrees);Actual distance to next level (m);Longitudinal slope to next level (%);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2362"/>
         <source>Xcen;Ycen;Zcen;Diff. altitude entre terrain p. central;Azimut p. central suivant (grad);Distance réelle p. central suivant (m);Pente long p. central suivant (%)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>X center;Y center;Z center;Altitude difference to central terrain;Azimuth to next central point (grade);Actual distance to next central point (m);Longitudinal slope to next central point (%)
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2266"/>
         <source>Lacet;Volume en déblai (mu00B3);Volume en remblai (mu00B3);</source>
-        <translation type="unfinished"></translation>
+        <translation>Lace turn;Excavation Volume (m³);Backfill Volume (m³);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2267"/>
         <source>Emprise en déblai (m²);Emprise en remblai (m²);Emprise totale (m²)
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Excavation footprint (m²);Backfill footprint (m²);Total footprint (m²)
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2355"/>
         <source>Piquet;Type;Configuration;Pente Gauche (%);</source>
-        <translation type="unfinished"></translation>
+        <translation>Stake;Type;Configuration;Left Slope (%);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2473"/>
         <source>Aucun, analyse à chaque sommet de la couche desserte
 </source>
-        <translation type="unfinished"></translation>
+        <translation>None, analysis at each vertex of the service layer
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2478"/>
         <source>0.5 x Largeur de plateforme
 </source>
-        <translation type="unfinished"></translation>
+        <translation>0,5 x Plateform width
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2488"/>
@@ -199,71 +203,75 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
     <message>
         <location filename="../CubaRoad_1_function.py" line="2494"/>
         <source>     Résolution (m) :      </source>
-        <translation type="unfinished"></translation>
+        <translation>     Resolution (m) :      </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2495"/>
         <source>   - Couche Desserte :     </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Service layer :     </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2498"/>
         <source>PARAMETRES UTILISES POUR LA MODELISATION:
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>PARAMETERS USED FOR MODELING:
+
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2499"/>
         <source>   - Seuil de pente maximum (ripage=1) :                          </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Maximum slope threshold (grading=1) :                          </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2500"/>
         <source>   - Seuil de pente minimum (ripage=0) :                          </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Minimum slope threshold (grading=1) :                          </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2501"/>
         <source>   - Pas de l&apos;analyse :                                           </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Step of the analysis :                                           </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2502"/>
         <source>   - Largeur de la zone tampon autour de l&apos;axe théorique :        </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Width of the buffer zone around the theoretical axis :        </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2503"/>
         <source>   - Sauvegarde des profils perpendiculaires :                    </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Saving of perpendicular profiles :                    </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2504"/>
         <source>   - Sauvegarde des couches SIG :                                 </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Saving of the GIS layer :                                 </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2506"/>
         <source>   - Retracer les lacets :                                        Non
 </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Re-trace the laces :                                             No
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2508"/>
         <source>   - Retracer les lacets :                                        Oui
 </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Re-trace the laces :                                             Yes
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2509"/>
         <source>     + Rayon de courbure appliqué aux lacets :                    </source>
-        <translation type="unfinished"></translation>
+        <translation>     + Radius of curvature applied to the laces turn :                    </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2510"/>
         <source>     + Angle au-delà duquel un virage est considéré comme lacet : </source>
-        <translation type="unfinished"></translation>
+        <translation>     + Angle above which a turn is considered a lace turn : </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2527"/>
@@ -277,65 +285,70 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
         <source>Auteur: Sylvain DUPIRE - SylvaLab
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Author: Sylvain DUPIRE - Sylvalab
+
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2529"/>
         <source>Date et heure de lancement du script:                                      </source>
-        <translation type="unfinished"></translation>
+        <translation>Date and time at script launch:                                      </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2530"/>
         <source>Date et heure a la fin de l&apos;éxécution du script:                           </source>
-        <translation type="unfinished"></translation>
+        <translation>Date and time at script end:                           </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2531"/>
         <source>Temps total d&apos;éxécution du script:                                         </source>
-        <translation type="unfinished"></translation>
+        <translation>Total time of script execution:                                         </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2535"/>
         <source>RESULTATS DU CALCUL:
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>RESULTS OF THE CALCULATION:
+
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2536"/>
         <source>                                       Sans pas d&apos;analyse     Avec pas d&apos;analyse
 </source>
-        <translation type="unfinished"></translation>
+        <translation>                                       Without analysis step     With analysis step
+</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2537"/>
         <source>   - Longueur planimétrique du tracé : </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Planimetric length of the layout : </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2538"/>
         <source>   - Volume en déblai :                </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Excavation volume :                </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2539"/>
         <source>     * dont volume à évacuer :         </source>
-        <translation type="unfinished"></translation>
+        <translation>     * including volume to be removed :         </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2540"/>
         <source>     * dont volume de roche :          </source>
-        <translation type="unfinished"></translation>
+        <translation>     * including volume of rock :          </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2541"/>
         <source>   - Volume en remblai :               </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Backfill volume :               </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2542"/>
         <source>   - Surface d&apos;emprise :               </source>
-        <translation type="unfinished"></translation>
+        <translation>   - Footprint area :               </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3353"/>
@@ -348,42 +361,43 @@ CubaRoad - v0.2</translation>
         <location filename="../CubaRoad_1_function.py" line="3354"/>
         <source>
     - Vérification des donnees spatiales</source>
-        <translation type="unfinished"></translation>
+        <translation>
+    - Spatial data verification</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3374"/>
         <source>    - Chargement des donnees</source>
-        <translation type="unfinished"></translation>
+        <translation>    - Data loading</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3411"/>
         <source>    - Calcul des cubatures</source>
-        <translation type="unfinished"></translation>
+        <translation>    - Volume calculation</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3455"/>
         <source>       + Le calcul n&apos;a pas été réalisé pour le point n°</source>
-        <translation type="unfinished"></translation>
+        <translation>       + Calculation was not performed for point No.</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3458"/>
         <source>    - Calcul terminé</source>
-        <translation type="unfinished"></translation>
+        <translation>    - Calculation completed</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3466"/>
         <source>    - Sauvergarde des tableaux terminée</source>
-        <translation type="unfinished"></translation>
+        <translation>    - Saving of tables completed</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3478"/>
         <source>    - Sauvergarde des couches SIG terminée</source>
-        <translation type="unfinished"></translation>
+        <translation>    - Saving of GIS layers completed</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="3484"/>
         <source>    - Traitement terminé</source>
-        <translation type="unfinished"></translation>
+        <translation>    - Processing completed</translation>
     </message>
 </context>
 <context>
