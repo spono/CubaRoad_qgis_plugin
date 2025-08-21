@@ -144,7 +144,7 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
     <message>
         <location filename="../CubaRoad_1_function.py" line="2266"/>
         <source>Lacet;Volume en déblai (mu00B3);Volume en remblai (mu00B3);</source>
-        <translation>Lace turn;Excavation Volume (m³);Backfill Volume (m³);</translation>
+        <translation>hairpin turn;Excavation Volume (m³);Backfill Volume (m³);</translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2267"/>
@@ -169,7 +169,7 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
         <location filename="../CubaRoad_1_function.py" line="2478"/>
         <source>0.5 x Largeur de plateforme
 </source>
-        <translation>0,5 x Plateform width
+        <translation>0,5 x Platform width
 </translation>
     </message>
     <message>
@@ -191,7 +191,7 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
         <source>FICHIERS UTILISES POUR LA MODELISATION:
 
 </source>
-        <translation>FILS USED FOR THE MODELLING:
+        <translation>FILES USED FOR THE MODELLING:
 
 </translation>
     </message>
@@ -215,7 +215,7 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
         <source>PARAMETRES UTILISES POUR LA MODELISATION:
 
 </source>
-        <translation>PARAMETERS USED FOR MODELING:
+        <translation>PARAMETERS USED FOR MODELLING:
 
 </translation>
     </message>
@@ -266,12 +266,12 @@ THE FOLLOWING PROBLEMS HAVE BEEN IDENTIFIED REGARDING SPATIAL INPUTS:
     <message>
         <location filename="../CubaRoad_1_function.py" line="2509"/>
         <source>     + Rayon de courbure appliqué aux lacets :                    </source>
-        <translation>     + Radius of curvature applied to the laces turn :                    </translation>
+        <translation>     + Radius of curvature applied to the hairpin turn :                    </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2510"/>
         <source>     + Angle au-delà duquel un virage est considéré comme lacet : </source>
-        <translation>     + Angle above which a turn is considered a lace turn : </translation>
+        <translation>     + Angle above which a turn is considered a hairpin turn : </translation>
     </message>
     <message>
         <location filename="../CubaRoad_1_function.py" line="2527"/>
@@ -409,8 +409,8 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="122"/>
-        <source>buffer around theorical axis of the road</source>
-        <translation type="obsolete">buffer around theorical axis of the road</translation>
+        <source>Buffer around theoretical axis of the road</source>
+        <translation type="obsolete">Buffer around theoretical axis of the road</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="180"/>
@@ -419,18 +419,18 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="193"/>
-        <source>Radius of lace turns</source>
-        <translation>Radius of lace turns</translation>
+        <source>Radius of hairpin turns</source>
+        <translation>Radius of hairpin turns</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="206"/>
-        <source>Inferior treshold of cross slope to start skiding the road axis</source>
-        <translation>Inferior treshold of cross slope to start skiding the road axis</translation>
+        <source>Lower threshold of cross slope to start skidding the road axis</source>
+        <translation>Lower threshold of cross slope to start skidding the road axis</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="219"/>
-        <source>Minimum angle to be considered as lace turn</source>
-        <translation>Minimum angle to be considered as lace turn</translation>
+        <source>Minimum angle to be considered as hairpin turn</source>
+        <translation>Minimum angle to be considered as hairpin turn</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="232"/>
@@ -454,13 +454,13 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="310"/>
-        <source>Results space</source>
-        <translation>Results space</translation>
+        <source>Results folder</source>
+        <translation>Results folder</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="336"/>
-        <source>Road file from Sylvaccess ?</source>
-        <translation>Road file from Sylvaccess ?</translation>
+        <source>Does the road file come from Sylvaccess ?</source>
+        <translation>Does the road file come from Sylvaccess ?</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="362"/>
@@ -474,18 +474,18 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="367"/>
-        <source>Save the point of analyse an transects ?</source>
-        <translation type="obsolete">Save the point of analyse an transects ?</translation>
+        <source>Save the point of analyse and transects ?</source>
+        <translation type="obsolete">Save the point of analyse and transects ?</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="401"/>
-        <source>Cross slope beyonde which 100% of material is excavated</source>
-        <translation>Cross slope beyonde which 100% of material is excavated</translation>
+        <source>Cross slope beyond which 100% of material is excavated</source>
+        <translation>Cross slope beyond which 100% of material is excavated</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="393"/>
-        <source>Toleroance to consider an intersection with errain</source>
-        <translation type="obsolete">Toleroance to consider an intersection with errain</translation>
+        <source>Tolerance to consider an intersection with terrain</source>
+        <translation type="obsolete">Tolerance to consider an intersection with terrain</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="440"/>
@@ -544,8 +544,8 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="125"/>
-        <source>Buffer around theorical axis of the road</source>
-        <translation>buffer around theorical axis of the road</translation>
+        <source>Buffer around theoretical axis of the road</source>
+        <translation>buffer around theoretical axis of the road</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="388"/>
