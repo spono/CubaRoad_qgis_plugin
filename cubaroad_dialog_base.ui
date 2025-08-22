@@ -281,7 +281,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Yes / No</string>
+         <string>Yes</string>
         </property>
        </widget>
       </item>
@@ -294,7 +294,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Yes / No</string>
+         <string>Yes</string>
         </property>
        </widget>
       </item>
@@ -346,7 +346,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Yes / No</string>
+         <string>Yes</string>
         </property>
        </widget>
       </item>
