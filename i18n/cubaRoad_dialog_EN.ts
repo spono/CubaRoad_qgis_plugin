@@ -459,8 +459,8 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="336"/>
-        <source>Does the road file come from Sylvaccess ?</source>
-        <translation>Does the road file come from Sylvaccess ?</translation>
+        <source>Does the road file come from SylvaRoad ?</source>
+        <translation>Does the road file come from SylvaRoad ?</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="362"/>
@@ -474,8 +474,8 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="367"/>
-        <source>Save the point of analyse and transects ?</source>
-        <translation type="obsolete">Save the point of analyse and transects ?</translation>
+        <source>Save the point of analysys and transects ?</source>
+        <translation type="obsolete">Save the point of analysys and transects ?</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="401"/>
@@ -549,8 +549,8 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="388"/>
-        <source>Save the point of analyse and transects ?</source>
-        <translation>Save the point of analyse and transects ?</translation>
+        <source>Save the point of analysys and transects ?</source>
+        <translation>Save the point of analysys and transects ?</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="414"/>
