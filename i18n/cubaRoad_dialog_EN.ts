@@ -449,8 +449,8 @@ CubaRoad - v0.2</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="349"/>
-        <source>Yes / No</source>
-        <translation>Yes / No</translation>
+        <source>Yes</source>
+        <translation>Yes</translation>
     </message>
     <message>
         <location filename="../cubaroad_dialog_base.ui" line="310"/>
