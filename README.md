@@ -58,7 +58,56 @@ Tags = ___Desserte___, ___forestière___, ___montagne___, ___cubature___, ___MNT
     
 &nbsp;   
   
-  
+- - -
+**ENGLISH VERSION**
+
+# CubaRoad
+## Tool for automatic calculation of cut/fill volumes along a route
+
+### Context and Objective of CubaRoad
+
+Digital elevation models (DEMs) derived from high-resolution spatial data (LiDAR, radar, etc.) now provide a very accurate representation of the terrain. This high-quality representation opens the door to numerous digital applications to facilitate foresters' fieldwork, particularly in the most rugged areas.
+
+When designing new forest access routes (roads or tracks), this type of DEM allows for automatic volume calculations to assess cut and fill volumes.
+
+CubaRoad is part of this approach and aims to assist foresters in the design of new forest access routes by allowing them to automatically calculate these volumes along a route. The tool returns a spreadsheet summarizing the information useful for designing new access routes for each segment analyzed. It is also possible to view the theoretical cross-section of the access route before and after the road is created for each analysis point.
+
+![SylvaLab](cubaroad/img/illustration.png?raw=true)
+
+Tags = ___Desserte___, ___forestry___, ___mountain___, ___cubature___, ___DTM___, ___cut___, ___fill___
+
+---  
+### CubaRoad Input Data
+**Required Spatial Data**:
+
+- Digital Elevation Model (raster preferably from Lidar data)
+	- Line (line shapefile) with the definition of the following for each segment:
+	- Platform width or base width
+	- Upstream slope
+	- Downstream slope
+	- Rock percentage
+	- Calculation method
+
+**Modeling parameters**:
+- Step of analysis
+- Maximum cross-slope threshold (slip = 1)
+- Minimum cross-slope threshold (slip = 0)
+
+### CubaRoad Output Data
+
+Document summarizing the modeling parameters and general results
+A spreadsheet with the results per segment
+Line connecting the elevation points (shapefile)
+Line connecting the platform centers (shapefile)
+Road base area (shapefile)
+Road right-of-way area (shapefile)
+Analysis points (shapefile)
+A profile for each analysis point
+
+![profil](cubaroad/img/profil.png?raw=true)
+    
+&nbsp; 
+
 ---  
 
 
