@@ -122,7 +122,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Buffer around theorical axis of the road</string>
+         <string>Buffer around theoretical axis of the road</string>
         </property>
        </widget>
       </item>
@@ -333,7 +333,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Road file from Sylvaccess ?</string>
+         <string>Does the road file come from SylvaRoad ?</string>
         </property>
        </widget>
       </item>
@@ -398,7 +398,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Cross slope beyonde which 100% of material is excavated</string>
+         <string>Cross slope beyond which 100% of material is excavated</string>
         </property>
        </widget>
       </item>
