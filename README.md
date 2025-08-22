@@ -72,9 +72,12 @@ When designing new forest access routes (roads or tracks), this type of DEM allo
 
 CubaRoad is part of this approach and aims to assist foresters in the design of new forest access routes by allowing them to automatically calculate these volumes along a route. The tool returns a spreadsheet summarizing the information useful for designing new access routes for each segment analyzed. It is also possible to view the theoretical cross-section of the access route before and after the road is created for each analysis point.
 
+This plugin is a QGIS adaptation of the tool that can be found at: (<https://gitlab.com/SDupire/cubaroad>)
+
+
 ![SylvaLab](img/illustration.png?raw=true)
 
-Tags = ___Desserte___, ___forestry___, ___mountain___, ___cubature___, ___DTM___, ___cut___, ___fill___
+Tags = ___forestry___, ___mountain___, ___cubature___, ___DTM___, ___cut___, ___fill___, ___road___
 
 ---  
 ### CubaRoad Input Data
