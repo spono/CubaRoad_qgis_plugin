@@ -5,10 +5,10 @@ Version : 0.1
 Langage : Python 3.x  
 
 Financement : **Office National des Forêts - Pôle RDI de Chambéry** (*laurent.malabeux@onf.fr*)  
-![ONF](cubaroad/img/onf_logo.gif?raw=true)
+![ONF](img/onf_logo.gif?raw=true)
 
 Conception et développement : **Sylvain DUPIRE, SylvaLab - 2021** (*sylvain.dupire@sylvalab.fr*)   
-![SylvaLab](cubaroad/img/logo_sylvalab.png?raw=true)
+![SylvaLab](img/logo_sylvalab.png?raw=true)
 
 ---
 ### Contexte et objectif de CubaRoad
@@ -19,7 +19,7 @@ Dans le cadre de la conception de nouvelles dessertes forestières (route ou pis
 
 CubaRoad s'inscrit dans cette logique et ambitionne d'aider les forestiers dans la conception de nouvelles dessertes forestières en leur permettant de calculer automatiquement ces volumes le long d'un tracé. L'outil retourne un tableur récapitulant les informations utiles à la conception de nouvelle desserte pour chaque segment analysé. Il est aussi possible de visualiser le profil en travers théorique de la desserte avant et après la création de la route pour chaque point d'analyse.  
 
-![SylvaLab](cubaroad/img/illustration.png?raw=true)
+![SylvaLab](img/illustration.png?raw=true)
 
 Tags = ___Desserte___, ___forestière___, ___montagne___, ___cubature___, ___MNT___, ___déblai___, ___remblai___
 
@@ -54,7 +54,7 @@ Tags = ___Desserte___, ___forestière___, ___montagne___, ___cubature___, ___MNT
 - Les points d'analyse (shapefile)
 - Un profil pour chaque point d'analyse    
     
-![profil](cubaroad/img/profil.png?raw=true)
+![profil](img/profil.png?raw=true)
     
 &nbsp;   
   
@@ -72,7 +72,7 @@ When designing new forest access routes (roads or tracks), this type of DEM allo
 
 CubaRoad is part of this approach and aims to assist foresters in the design of new forest access routes by allowing them to automatically calculate these volumes along a route. The tool returns a spreadsheet summarizing the information useful for designing new access routes for each segment analyzed. It is also possible to view the theoretical cross-section of the access route before and after the road is created for each analysis point.
 
-![SylvaLab](cubaroad/img/illustration.png?raw=true)
+![SylvaLab](img/illustration.png?raw=true)
 
 Tags = ___Desserte___, ___forestry___, ___mountain___, ___cubature___, ___DTM___, ___cut___, ___fill___
 
@@ -104,7 +104,7 @@ Road right-of-way area (shapefile)
 Analysis points (shapefile)
 A profile for each analysis point
 
-![profil](cubaroad/img/profil.png?raw=true)
+![profil](img/profil.png?raw=true)
     
 &nbsp; 
 
