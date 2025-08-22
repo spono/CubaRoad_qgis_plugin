@@ -42,7 +42,7 @@ class cubaroadDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
-        self.setWindowTitle("SylvaRoad")
+        self.setWindowTitle("CubaRoad")
         #self.setWindowIcon(QIcon(':/plugins/sylvaccess_plugin/icon.png'))
         self.iface = iface
         global Cubaroad_UI
@@ -57,10 +57,10 @@ class cubaroadDialog(QtWidgets.QDialog, FORM_CLASS):
         #|______/   \______/   \______/      |__|     \______/  |__| \__|# 
         ################################################################## 
         ##test
-        self.lineEdit_1.setText("C:Users/yoann/Downloads/meisenthal2")
-        self.lineEdit_2.setText("C:/Users/yoann/Downloads/meisenthal2/mnt_rgealti_5m.tif")
-        self.lineEdit_3.setText("C:/Users/yoann/Downloads/meisenthal2/results2/salidas_FRD/frd_S_0.0_12.5_R_8.0_FAC_3.0_1.0_1.0_num_1.shp")
-        self.lineEdit_4.setText("C:/Users/yoann/Downloads/meisenthal2/results3")
+        #self.lineEdit_1.setText("C:Users/yoann/Downloads/meisenthal2")
+        #self.lineEdit_2.setText("C:/Users/yoann/Downloads/meisenthal2/mnt_rgealti_5m.tif")
+        #self.lineEdit_3.setText("C:/Users/yoann/Downloads/meisenthal2/results2/salidas_FRD/frd_S_0.0_12.5_R_8.0_FAC_3.0_1.0_1.0_num_1.shp")
+        #self.lineEdit_4.setText("C:/Users/yoann/Downloads/meisenthal2/results3")
         # Connexion des signaux des boutons OK et Annuler()
         self.button_box.accepted.connect(self.run)
         self.button_box.rejected.connect(self.abort)
@@ -112,14 +112,14 @@ class cubaroadDialog(QtWidgets.QDialog, FORM_CLASS):
         from_Sylvaroad = self.checkBox_1.isChecked()    # True if Road_file from SylvaRoad / False if Road_file is not from SylvaRoad
         step = self.spinBox_1.value()                   # [m] Step of analysis
         max_exca_slope = self.spinBox_2.value()         # [%] Cross slope beyond which 100% of material is excavated
-        min_exca_slope = self.spinBox_3.value()         # [%] Inferior threshold of cross slope to start skidding the road axis
-        z_tolerance = self.spinBox_4.value()            # [cm] tolerance to consider an intercetion with terrain
-        xy_tolerance = self.spinBox_5.value()           # [m] buffer around theoretical axis of the road 
+        min_exca_slope = self.spinBox_3.value()         # [%] Lower threshold of cross slope to start skidding the road axis
+        z_tolerance = self.spinBox_4.value()            # [cm] Tolerance to consider an intercetion with terrain
+        xy_tolerance = self.spinBox_5.value()           # [m] Buffer around theoretical axis of the road 
         if xy_tolerance == -1: xy_tolerance = None      # Put -1 to have xy_tolerance = 0.5*road_width
         save_fig = self.checkBox_2.isChecked()          # Save (True) or not (False) the ground profile of each calculation point  
         save_shp = self.checkBox_3.isChecked()          # Save (True) or not (False) the point of analyse and transects
-        Radius = self.spinBox_6.value()                 # [m] Radius of lace turns
-        angle_hairpin = self.spinBox_7.value()          # [°] Min angle to be considered as lace turn
+        Radius = self.spinBox_6.value()                 # [m] Radius of hairpin turns
+        angle_hairpin = self.spinBox_7.value()          # [°] Min angle to be considered as hairpin turn
 
         return Wspace,Dtm_file,Road_file,Res_dir,from_Sylvaroad,step,max_exca_slope,min_exca_slope,z_tolerance,xy_tolerance,save_fig,save_shp,Radius,angle_hairpin
 
